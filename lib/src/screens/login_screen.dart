@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_edu/src/screen_sizes/screen_size_page.dart';
 import 'package:online_edu/src/screens/sign_up_screen.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -25,28 +23,31 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _validator() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    var response = await authProvider.signInWithEmailAndPassword(email.text.toString(), password.text.toString());
 
-    if (response == 1) {
-      Navigator.pushReplacementNamed(context, '/dashboard');
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Alert!!"),
-            content: const Text("Email or Password incorrect"),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    Navigator.pushReplacementNamed(context, '/dashboard');
+
+    // final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    // var response = await authProvider.signInWithEmailAndPassword(email.text.toString(), password.text.toString());
+
+    // if (response == 1) {
+    //   Navigator.pushReplacementNamed(context, '/dashboard');
+    // } else {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: const Text("Alert!!"),
+    //         content: const Text("Email or Password incorrect"),
+    //         actions: <Widget>[
+    //           TextButton(
+    //             onPressed: () => Navigator.pop(context, 'OK'),
+    //             child: const Text('OK'),
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
+    // }
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
