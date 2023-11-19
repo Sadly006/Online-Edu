@@ -19,4 +19,29 @@ class AuthProvider extends ChangeNotifier {
       return 0;
     }
   }
+
+  Future signUpWithEmailAndPassword(String email, String password) async {
+    try{
+      final user = await _authService.signUpWithEmailAndPassword(email, password);
+    if (user != null) {
+      _user = User(uid: user.uid, email: user.email!);
+      notifyListeners();
+      return 1;
+    }else{
+      return 0;
+    }
+    } catch(e){
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _authService.signOut();
+      _user = null;
+      notifyListeners();
+    } catch (e) {
+      print('Error signing out: $e');
+    }
+  }
 }

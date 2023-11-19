@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:online_edu/src/providers/auth_provider.dart';
 import 'package:online_edu/src/screen_sizes/screen_size_page.dart';
-import 'package:online_edu/src/screens/sign_up_screen.dart';
+import 'package:online_edu/src/screens/login_screen.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  late var token;
+class _SignUpScreenState extends State<SignUpScreen> {
   final email = TextEditingController();
   final password = TextEditingController();
-  bool _obscureText = true;
+  final confirmPassword = TextEditingController();
 
+  bool _obscureText = true;
 
   void _toggle() {
     setState(() {
@@ -24,9 +24,18 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    email.dispose();
+    password.dispose();
+    confirmPassword.dispose();
+  }
+
   _validator() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    var response = await authProvider.signInWithEmailAndPassword(email.text.toString(), password.text.toString());
+    if (password.text.toString() == confirmPassword.text.toString()) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    var response = await authProvider.signUpWithEmailAndPassword(email.text.toString(), password.text.toString());
 
     if (response == 1) {
       Navigator.pushReplacementNamed(context, '/dashboard');
@@ -36,13 +45,24 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Alert!!"),
-            content: const Text("Email or Password incorrect"),
+            content: const Text("Somthing Went Wrong!"),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
                 child: const Text('OK'),
               ),
             ],
+          );
+        },
+      );
+    }
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            title: Text("Alert!!"),
+            content: Text("Passwords must match"),
           );
         },
       );
@@ -70,12 +90,12 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 0, 3),
+                    padding: const EdgeInsets.fromLTRB(20, 3, 0, 10),
                     child: Text(
-                      "HI THERE,",
+                      "JOIN US NOW!!",
                       style: TextStyle(
-                        color: Theme.of(context).highlightColor,
                         fontSize: 23,
+                        color: Theme.of(context).highlightColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -87,22 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 3, 0, 10),
                     child: Text(
-                      "WELCOME!!",
-                      style: TextStyle(
-                        color: Theme.of(context).highlightColor,
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 3, 0, 10),
-                    child: Text(
-                      "If you are new, ",
+                      "Already have an account? ",
                       style: TextStyle(
                         color: Theme.of(context).highlightColor,
                         fontSize: 17,
@@ -114,17 +119,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextButton(
                         style: TextButton.styleFrom(
                           primary: Colors.black,
-                          onSurface: Colors.red,
+                          onSurface: Theme.of(context).primaryColor,
                         ),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SignUpScreen()),
+                                builder: (context) => const LoginScreen()),
                           );
                         },
                         child: Text(
-                          'Sign Up!',
+                          'Sign In!',
                           style: TextStyle(
                             fontSize: 17,
                             color: Theme.of(context).primaryColor,
@@ -137,8 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Center(
-                  child: TextField(
-                    style: const TextStyle(color: Colors.black),
+                  child: TextFormField(
                     controller: email,
                     decoration: InputDecoration(
                       filled: true,
@@ -156,8 +160,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Center(
                   child: TextFormField(
-                    style: const TextStyle(color: Colors.black),
-                    obscureText: _obscureText,
                     controller: password,
                     decoration: InputDecoration(
                       filled: true,
@@ -165,7 +167,37 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide.none,
                       ),
-                      hintText: "Password",
+                      hintText: 'Password',
+                      suffixIcon: InkWell(
+                        onTap: _toggle,
+                        child: Icon(
+                          _obscureText
+                              ? Icons.remove_red_eye_outlined
+                              : Icons.remove_red_eye_outlined,
+                          size: 20.0,
+                          color: _obscureText
+                              ? Colors.grey
+                              : Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Center(
+                  child: TextFormField(
+                    obscureText: true,
+                    controller: confirmPassword,
+                    decoration: InputDecoration(
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintText: 'Confirm Password',
                       suffixIcon: InkWell(
                         onTap: _toggle,
                         child: Icon(
@@ -185,28 +217,28 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: GestureDetector(
-                  child: SizedBox(
-                    width: displayHeight(context) * 0.45,
-                    height: displayHeight(context) * 0.07,
+                child: SizedBox(
+                  width: displayHeight(context) * 0.45,
+                  height: displayHeight(context) * 0.07,
+                  child: GestureDetector(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Row(
+                          children: <Widget>[
+                            CircularProgressIndicator(),
+                            Text("  Signing-Up...")
+                          ],
+                        ),
+                      ));
+                      _validator();
+                    },
                     child: Card(
                       color: Theme.of(context).primaryColor,
                       child: const Center(
-                        child: Text("Sign In"),
+                        child: Text("Sign Up"),
                       ),
                     ),
                   ),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Row(
-                        children: <Widget>[
-                          CircularProgressIndicator(),
-                          Text("  Signing-In...")
-                        ],
-                      ),
-                    ));
-                    _validator();
-                  },
                 ),
               ),
             ],
