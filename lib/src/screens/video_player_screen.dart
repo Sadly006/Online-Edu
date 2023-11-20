@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_edu/src/widgets/bookmark_marker.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
@@ -15,11 +16,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   bool _isPlaying = false;
   bool _showControls = true;
   bool _isSeeking = false;
+  List<Duration> bookmarks = [];
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl)
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
       ..initialize().then((_) {
         setState(() {
           _controller.play();
@@ -61,6 +63,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     });
   }
 
+  void _addBookmark() {
+    setState(() {
+      bookmarks.add(_controller.value.position);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,14 +107,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (_controller.value.isInitialized)
-                        VideoProgressIndicator(
+                        VideoProgressIndicatorCustom(
                           _controller,
                           allowScrubbing: true,
-                          colors: const VideoProgressColors(
+                          colors: VideoProgressColorsCustom(
                             playedColor: Colors.amber,
                             bufferedColor: Colors.grey,
                             backgroundColor: Colors.black,
                           ),
+                          markers: bookmarks.map((bookmark) {
+                            return BookmarkMarker(
+                              bookmark,
+                              color: Colors.green,
+                            );
+                          }).toList(),
                         ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -117,9 +131,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.bookmark),
-                            onPressed: () {
-                              debugPrint('Bookmark at ${_controller.value.position}');
-                            },
+                            onPressed: _addBookmark,
                           ),
                         ],
                       ),
