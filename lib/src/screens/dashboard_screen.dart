@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_edu/src/providers/auth_provider.dart';
 import 'package:online_edu/src/providers/course_provider.dart';
+import 'package:online_edu/src/screens/bookmark_list_screen.dart';
 import 'package:online_edu/src/widgets/course_card.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +46,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             ListTile(
               title: const Text('Manage Bookmarks'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookmarksScreen(),
+                  ),
+                );
+              },
             ),
             ListTile(
               title: const Text('Sign Out'),
