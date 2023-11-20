@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:online_edu/src/widgets/bookmark_marker.dart';
+import 'package:online_edu/src/models/bookmark_marker_model.dart';
+import 'package:online_edu/src/providers/bookmark_provider.dart';
+import 'package:online_edu/src/providers/course_provider.dart';
+import 'package:online_edu/src/widgets/video_progress_colors_custom.dart';
+import 'package:online_edu/src/widgets/video_progress_indicator_custom.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
-  final String videoUrl;
-
-  const VideoPlayerScreen({Key? key, required this.videoUrl}) : super(key: key);
+  const VideoPlayerScreen({Key? key}) : super(key: key);
 
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
@@ -21,7 +24,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
+    final courseProvider = Provider.of<CourseProvider>(context, listen: false);
+    _controller = VideoPlayerController.networkUrl(Uri.parse(courseProvider.currentCourse!.videoUrl))
       ..initialize().then((_) {
         setState(() {
           _controller.play();
@@ -64,13 +68,18 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _addBookmark() {
+    final courseProvider = Provider.of<CourseProvider>(context, listen: false);
     setState(() {
-      bookmarks.add(_controller.value.position);
+      // bookmarks.add(_controller.value.position);
+      Provider.of<BookmarkProvider>(context, listen: false).addBookmark(courseProvider.currentCourse!.id, _controller.value.position);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final bookmarkProvider = Provider.of<BookmarkProvider>(context);
+    final courseProvider = Provider.of<CourseProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -115,7 +124,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             bufferedColor: Colors.grey,
                             backgroundColor: Colors.black,
                           ),
-                          markers: bookmarks.map((bookmark) {
+                          markers: bookmarkProvider.getBookmarks(courseProvider.currentCourse!.id).map((bookmark) {
                             return BookmarkMarker(
                               bookmark,
                               color: Colors.green,

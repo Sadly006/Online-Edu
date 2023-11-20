@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:online_edu/src/providers/auth_provider.dart';
+import 'package:online_edu/src/providers/bookmark_provider.dart';
 import 'package:online_edu/src/providers/course_provider.dart';
 import 'package:online_edu/src/providers/theme_provider.dart';
 import 'package:online_edu/src/screens/dashboard_screen.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => CourseProvider()),
+        ChangeNotifierProvider(create: (_) => BookmarkProvider()),
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
       ],
       child: MaterialApp(

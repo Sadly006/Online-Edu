@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:online_edu/src/providers/course_provider.dart';
 import 'package:online_edu/src/screen_sizes/screen_size_page.dart';
 import 'package:online_edu/src/screens/video_player_screen.dart';
+import 'package:provider/provider.dart';
 import '../models/course_model.dart';
 
 class CourseCard extends StatelessWidget {
@@ -25,6 +27,7 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final courseProvider = Provider.of<CourseProvider>(context);
     return Card(
       child: GestureDetector(
             onTap: () {},
@@ -65,10 +68,11 @@ class CourseCard extends StatelessWidget {
                         alignment: Alignment.bottomRight,
                         child: ElevatedButton(
                           onPressed: () {
+                            courseProvider.setCurrentCourse(course);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => VideoPlayerScreen(videoUrl: course.videoUrl),
+                                builder: (context) => const VideoPlayerScreen(),
                               ),
                             );
                           },

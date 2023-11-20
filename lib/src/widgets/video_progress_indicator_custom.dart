@@ -1,25 +1,7 @@
-// lib/src/widgets/video_progress_indicator.dart
 import 'package:flutter/material.dart';
+import 'package:online_edu/src/models/bookmark_marker_model.dart';
+import 'package:online_edu/src/widgets/video_progress_colors_custom.dart';
 import 'package:video_player/video_player.dart';
-
-class BookmarkMarker {
-  final Duration position;
-  final Color color;
-
-  BookmarkMarker(this.position, {required this.color});
-}
-
-class VideoProgressColorsCustom {
-  final Color playedColor;
-  final Color bufferedColor;
-  final Color backgroundColor;
-
-  VideoProgressColorsCustom({
-    required this.playedColor,
-    required this.bufferedColor,
-    required this.backgroundColor,
-  });
-}
 
 class VideoProgressIndicatorCustom extends StatefulWidget {
   final VideoPlayerController controller;
@@ -138,11 +120,5 @@ class _VideoProgressIndicatorCustomState extends State<VideoProgressIndicatorCus
         _dragEnd = null;
       });
     }
-  }
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
   }
 }
