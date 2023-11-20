@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_edu/src/screen_sizes/screen_size_page.dart';
+import 'package:online_edu/src/screens/video_player_screen.dart';
 import '../models/course_model.dart';
 
 class CourseCard extends StatelessWidget {
@@ -63,7 +64,14 @@ class CourseCard extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VideoPlayerScreen(videoUrl: course.videoUrl),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0),
