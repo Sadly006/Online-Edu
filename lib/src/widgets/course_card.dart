@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_edu/src/providers/course_provider.dart';
 import 'package:online_edu/src/screen_sizes/screen_size_page.dart';
 import 'package:online_edu/src/screens/video_player_screen.dart';
+import 'package:online_edu/src/widgets/rating_widget.dart';
 import 'package:provider/provider.dart';
 import '../models/course_model.dart';
 
@@ -37,7 +38,7 @@ class CourseCard extends StatelessWidget {
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(7),
                 ),
-                height: 300,
+                height: 370,
                 width: displayWidth(context) * 0.46,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,9 +59,25 @@ class CourseCard extends StatelessWidget {
                       child: Text(
                         course.title,
                         style: TextStyle(
-                            color: Theme.of(context).highlightColor,
-                            fontSize: 18),
+                          color: Theme.of(context).highlightColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      child: Text(
+                        course.author,
+                        style: TextStyle(
+                          color: Theme.of(context).highlightColor,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      child: RatingWidget(rating: course.rating,)
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
@@ -77,6 +94,7 @@ class CourseCard extends StatelessWidget {
                             );
                           },
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),
