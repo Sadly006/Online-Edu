@@ -55,68 +55,79 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(7),
               ),
-              // height: 80,
               width: displayWidth(context) * 0.46,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Material(
                     elevation: 10,
-                    child: ListTile(
-                      leading: Image(
-                        image: NetworkImage(
-                            bookmakedCourses[index].imageUrl.toString()),
-                        fit: BoxFit.cover,
+                    child: Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                        child: ListTile(
+                          leading: Expanded(
+                            child: Image(
+                              image: NetworkImage(
+                                  bookmakedCourses[index].imageUrl.toString()),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          title: Text(bookmakedCourses[index].title),
+                        ),
                       ),
-                      title: Text(bookmakedCourses[index].title),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(15, 15, 0, 5),
+                    child: Text(
+                      "Bookmarks",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5),
-                    child: SizedBox(
-                      height: 100,
-                      child: ListView.builder(
-                        itemCount: bookmarkProvider.getBookmarks(courseId).length,
-                        itemBuilder: (context, idx) {
-                          List<Duration>? courseBookmarks = bookmarkProvider.getBookmarks(courseId);
-                          return Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              height: 30,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 50.0,
-                                    height: 25.0,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.play_arrow,
-                                        color: Colors.white,
-                                        size: 20.0,
-                                      ),
-                                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: bookmarkProvider.getBookmarks(courseId).length,
+                      itemBuilder: (context, idx) {
+                        List<Duration>? courseBookmarks = bookmarkProvider.getBookmarks(courseId);
+                        return Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 50.0,
+                                height: 25.0,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.play_arrow,
+                                    color: Colors.white,
+                                    size: 20.0,
                                   ),
-                                  const Padding(padding: EdgeInsets.all(5)),
-                                  Text(
-                                    "${courseBookmarks[index].inHours}:${courseBookmarks[index].inMinutes.remainder(60)}:${(courseBookmarks[index].inSeconds.remainder(60))}",
-                                    
-                                    style: const TextStyle(
-                                      color: Colors.black
-                                    ),
-                                  )
-                                ],
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      ),
-                    )
-                  )
+                              const Padding(padding: EdgeInsets.all(5)),
+                              Text(
+                                "${courseBookmarks[index].inHours}:${courseBookmarks[index].inMinutes.remainder(60)}:${(courseBookmarks[index].inSeconds.remainder(60))}",
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
-              )
+              ),
             ),
           );
         },
