@@ -94,33 +94,65 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                       itemCount: bookmarkProvider.getBookmarks(courseId).length,
                       itemBuilder: (context, idx) {
                         List<Duration>? courseBookmarks = bookmarkProvider.getBookmarks(courseId);
-                        return Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 50.0,
-                                height: 25.0,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.play_arrow,
-                                    color: Colors.white,
-                                    size: 20.0,
+                        return Dismissible(
+                          direction: DismissDirection.startToEnd,
+                          key: ValueKey<dynamic>(courseBookmarks[idx]),
+                          background: Card(
+                            color: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 5,
+                            child: const Center(
+                              child: Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.all(2)),
+                                  Icon(
+                                    Icons.delete,
+                                    size: 30,
                                   ),
-                                ),
+                                  Padding(padding: EdgeInsets.all(2)),
+                                  Text(
+                                    "Remove",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
                               ),
-                              const Padding(padding: EdgeInsets.all(5)),
-                              Text(
-                                "${courseBookmarks[idx].inHours}:${courseBookmarks[idx].inMinutes.remainder(60)}:${(courseBookmarks[idx].inSeconds.remainder(60))}",
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                ),
-                              )
-                            ],
+                            ),
+                          ),
+                          onDismissed: (DismissDirection direction) {
+                            bookmarkProvider.deleteBookmark(courseId, courseBookmarks[idx]);
+                          },
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 50.0,
+                                    height: 25.0,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.play_arrow,
+                                        color: Colors.white,
+                                        size: 20.0,
+                                      ),
+                                    ),
+                                  ),
+                                  const Padding(padding: EdgeInsets.all(5)),
+                                  Text(
+                                    "${courseBookmarks[idx].inHours}:${courseBookmarks[idx].inMinutes.remainder(60)}:${(courseBookmarks[idx].inSeconds.remainder(60))}",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       },

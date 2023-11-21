@@ -13,4 +13,11 @@ class BookmarkProvider with ChangeNotifier {
     _bookmarks[id] = _courseWiseBookMarks;
     notifyListeners();
   }
+
+  void deleteBookmark(String id, Duration position) {
+    List<Duration> _courseWiseBookMarks = _bookmarks[id] ?? [];
+    _courseWiseBookMarks.removeWhere((item) => item == position);
+    _bookmarks[id] = _courseWiseBookMarks;
+    notifyListeners();
+  }
 }
