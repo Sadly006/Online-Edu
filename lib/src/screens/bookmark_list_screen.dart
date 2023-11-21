@@ -115,7 +115,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                               ),
                               const Padding(padding: EdgeInsets.all(5)),
                               Text(
-                                "${courseBookmarks[index].inHours}:${courseBookmarks[index].inMinutes.remainder(60)}:${(courseBookmarks[index].inSeconds.remainder(60))}",
+                                "${courseBookmarks[idx].inHours}:${courseBookmarks[idx].inMinutes.remainder(60)}:${(courseBookmarks[idx].inSeconds.remainder(60))}",
                                 style: const TextStyle(
                                   color: Colors.black,
                                 ),
