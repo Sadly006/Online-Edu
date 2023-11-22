@@ -4,7 +4,7 @@ import 'package:online_edu/src/models/course_model.dart';
 class CourseProvider extends ChangeNotifier {
   // Static dummy courses for demonstration
   final List<Course> _enrolledCourses = [
-    Course(id: '1', title: 'Flutter, Become a Pro', videoUrl: 'https://logowik.com/content/uploads/images/flutter5786.jpg', imageUrl: "https://logowik.com/content/uploads/images/flutter5786.jpg", author: "Taosif Sadly", rating: 4.8),
+    Course(id: '1', title: 'Flutter, Become a Pro', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', imageUrl: "https://logowik.com/content/uploads/images/flutter5786.jpg", author: "Taosif Sadly", rating: 4.8),
     Course(id: '2', title: 'Introduction to NodeJS', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/590px-Node.js_logo.svg.png", author: "Taosif Sadly", rating: 3.5),
     Course(id: '3', title: "Redis: The Complete Developer's Guide", videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', imageUrl: "https://download.logo.wine/logo/Redis/Redis-Logo.wine.png", author: "Taosif Sadly", rating: 5),
     Course(id: '4', title: 'Create Applications Using Firestore', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', imageUrl: "https://cdn.dribbble.com/users/528264/screenshots/3140440/media/5f34fd1aa2ebfaf2cd548bafeb021c8f.png?resize=800x600&vertical=center", author: "Taosif Sadly", rating: 4.8),

@@ -1,16 +1,29 @@
-# online_edu
+<h1 align="center">
+Online Edu
+</h1>
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Introduction
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This is a video streaming application, built with **Flutter** for android devices. Authentecation is done by **Firebase**.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p align="center">
+<a href="https://drive.google.com/drive/folders/1FtW8k7IiOPR9IVDgurLiYFGqDSKwFDdv?usp=sharing">
+    <img alt="Get it on Google Play" height="200"
+        src="https://logowik.com/content/uploads/images/download-android-apk-badge9385.logowik.com.webp" />
+</a>  
+</p>
+
+<br>
+
+### Demo
+
+<p align='center'>
+<img   src="./assets/demo.gif" />
+</p>
+
+## Permissions
+
+No permission required
