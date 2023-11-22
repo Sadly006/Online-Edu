@@ -3,6 +3,7 @@ import 'package:online_edu/src/models/bookmark_marker_model.dart';
 import 'package:online_edu/src/providers/bookmark_provider.dart';
 import 'package:online_edu/src/providers/course_provider.dart';
 import 'package:online_edu/src/models/video_progress_colors_custom.dart';
+import 'package:online_edu/src/screen_sizes/screen_size_page.dart';
 import 'package:online_edu/src/widgets/video_progress_indicator_custom.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -37,7 +38,36 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       });
 
     _controller.addListener(() {
-      // Update the UI when the playback position changes
+      if (_controller.value.position >= _controller.value.duration) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Congratulations!!"),
+              content: const Text("You have completed this course successfully"),
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.popUntil(context, ModalRoute.withName("/dashboard"));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
+                  child: SizedBox(
+                    width: displayWidth(context) * 0.3,
+                    child: const Center(
+                      child: Text("Claim your certificate")
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      }
       setState(() {});
     });
   }
