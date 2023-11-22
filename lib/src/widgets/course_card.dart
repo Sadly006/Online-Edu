@@ -30,32 +30,35 @@ class CourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final courseProvider = Provider.of<CourseProvider>(context);
     return Card(
-      child: GestureDetector(
-            onTap: () {},
-            child: Container(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(7),
+        ),
+        height: 250,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                height: 150,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(7),
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(7),
+                      topRight: Radius.circular(7)),
+                  image: getImage(),
                 ),
-                height: 370,
-                width: displayWidth(context) * 0.46,
-                child: Column(
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          shape: BoxShape.rectangle,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(7),
-                              topRight: Radius.circular(7)),
-                          image: getImage(),
-                        ),
-                      ),
                     Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: Text(
                         course.title,
                         style: TextStyle(
@@ -79,43 +82,47 @@ class CourseCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: RatingWidget(rating: course.rating,)
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            courseProvider.setCurrentCourse(course);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => VideoPlayerScreen(seekTo: 0),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        courseProvider.setCurrentCourse(course);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VideoPlayerScreen(seekTo: 0),
                           ),
-                          child: SizedBox(
-                            width: displayWidth(context) * 0.2,
-                            child: const Center(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.play_arrow_rounded),
-                                  Text("Continue")
-                                ],
-                              ),
-                            ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: displayWidth(context) * 0.2,
+                        child: const Center(
+                          child: Row(
+                            children: [
+                              Icon(Icons.play_arrow_rounded),
+                              Text("Continue")
+                            ],
                           ),
                         ),
                       ),
-                    )
-                  ],
-                )),
-          ),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        )
+      ),
     );
   }
 }
