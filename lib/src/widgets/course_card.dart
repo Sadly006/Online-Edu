@@ -16,7 +16,7 @@ class CourseCard extends StatelessWidget {
       return DecorationImage(
         image: NetworkImage(
             course.imageUrl.toString()),
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
       );
     } else {
       return const DecorationImage(
@@ -36,12 +36,12 @@ class CourseCard extends StatelessWidget {
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(7),
         ),
-        height: 250,
+        height: displayHeight(context) * 0.27,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                height: 150,
+                height: displayHeight(context) * 0.15,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   shape: BoxShape.rectangle,
@@ -54,64 +54,70 @@ class CourseCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      child: Text(
-                        course.title,
-                        style: TextStyle(
-                          color: Theme.of(context).highlightColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      child: Text(
-                        course.author,
-                        style: TextStyle(
-                          color: Theme.of(context).highlightColor,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      child: RatingWidget(rating: course.rating,)
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        courseProvider.setCurrentCourse(course);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VideoPlayerScreen(seekTo: 0),
+                SizedBox(
+                  width: displayWidth(context) * 0.6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Text(
+                          course.title,
+                          style: TextStyle(
+                            color: Theme.of(context).highlightColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
                           ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
-                      child: SizedBox(
-                        width: displayWidth(context) * 0.2,
-                        child: const Center(
-                          child: Row(
-                            children: [
-                              Icon(Icons.play_arrow_rounded),
-                              Text("Continue")
-                            ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Text(
+                          course.author,
+                          style: TextStyle(
+                            color: Theme.of(context).highlightColor,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: RatingWidget(rating: course.rating,)
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: displayWidth(context) * 0.3,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          courseProvider.setCurrentCourse(course);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VideoPlayerScreen(seekTo: 0),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        child: SizedBox(
+                          width: displayWidth(context) * 0.2,
+                          child: const Center(
+                            child: Row(
+                              children: [
+                                Icon(Icons.play_arrow_rounded),
+                                Text("Continue")
+                              ],
+                            ),
                           ),
                         ),
                       ),

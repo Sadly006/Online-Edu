@@ -9,10 +9,10 @@ class RatingWidget extends StatelessWidget {
   Widget buildStar(BuildContext context, int index) {
     Icon icon;
     if (index >= rating) {
-      icon = const Icon(
+      icon = Icon(
         Icons.star_border,
         size: 20,
-        color: Colors.black,
+        color: Theme.of(context).highlightColor,
       );
     }
     else if (index > rating - 1 && index < rating) {
