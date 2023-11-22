@@ -15,7 +15,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final themeProvider = ThemeProvider();
+  final themeProvider = ThemeProvider(false);
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -25,13 +25,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BookmarkProvider()),
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
       ],
-      child: MaterialApp(
-        title: 'Online Edu',
-        theme: ThemeProvider().light,
-        routes: {
-          '/dashboard': (context) => DashboardScreen(),
-        },
-        home: const LoginScreen(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, value, child) {
+        return MaterialApp(
+          title: 'Online Edu',
+          theme: value.getTheme(),
+          routes: {
+            '/dashboard': (context) => DashboardScreen(),
+          },
+          home: const LoginScreen(),
+        );}
       ),
     );
   }

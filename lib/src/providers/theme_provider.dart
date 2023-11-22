@@ -3,6 +3,64 @@ import 'package:flutter/material.dart';
 class ThemeProvider extends ChangeNotifier {
   ThemeData _selectedTheme = ThemeData.light();
 
+  ThemeData dark = ThemeData.dark().copyWith(
+    primaryColor: const Color.fromRGBO(225, 99, 45, 1),
+    secondaryHeaderColor: const Color.fromRGBO(34, 34, 34, 1),
+    backgroundColor: const Color.fromRGBO(20, 20, 20, 1),
+    hoverColor: const Color.fromRGBO(43, 42, 42, 1),
+    scaffoldBackgroundColor: const Color.fromRGBO(34, 34, 34, 1),
+    canvasColor: const Color.fromRGBO(43, 42, 42, 1),
+    highlightColor: Colors.white70,
+    brightness: Brightness.dark,
+    focusColor: Colors.blueGrey[900],
+    shadowColor: const Color.fromRGBO(30, 34, 34, 1),
+    appBarTheme: const AppBarTheme(color: Colors.black12),
+    cardTheme: const CardTheme(
+      shadowColor: Colors.transparent,
+      color: Colors.black45,
+    ),
+    textTheme: const TextTheme(
+      headline1: TextStyle(
+        fontSize: 35,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      headline2: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+      ),
+      headline3: TextStyle(
+        color: Colors.white,
+        fontSize: 17,
+        fontWeight: FontWeight.bold,
+        decoration: TextDecoration.lineThrough,
+      ),
+      headline4: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+        color: Colors.black,
+      ),
+      headline5: TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w800,
+        color: Colors.white,
+      ),
+      headline6: TextStyle(
+        color: Colors.grey,
+        fontSize: 15,
+      ),
+      subtitle1: TextStyle(
+        color: Colors.white,
+        fontSize: 17,
+      ),
+      subtitle2: TextStyle(
+        color: Colors.white,
+        fontSize: 15,
+      ),
+    ),
+  );
+
   ThemeData light = ThemeData.light().copyWith(
     primaryColor: const Color.fromRGBO(238, 89, 33, 1),
     hoverColor: const Color.fromRGBO(238, 89, 33, 1),
@@ -59,8 +117,17 @@ class ThemeProvider extends ChangeNotifier {
     ),
   );
 
-  ThemeProvider() {
-    _selectedTheme = light;
+  ThemeProvider(bool darkThemeOn) {
+    _selectedTheme = darkThemeOn ? dark : light;
+  }
+
+  Future<void> swapTheme() async {
+    if (_selectedTheme == dark) {
+      _selectedTheme = light;
+    } else {
+      _selectedTheme = dark;
+    }
+    notifyListeners();
   }
 
   ThemeData getTheme() => _selectedTheme;

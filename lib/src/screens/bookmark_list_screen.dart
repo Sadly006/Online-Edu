@@ -43,7 +43,12 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text('Bookmarks'),
+        title: const Text('Bookmarks',
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+            ),
+          ),
       ),
       body: ListView.builder(
         itemCount: bookmakedCourses.length,
@@ -63,28 +68,32 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                 children: [
                   Material(
                     elevation: 10,
-                    child: Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                        child: ListTile(
-                          leading: Expanded(
-                            child: Image(
-                              image: NetworkImage(
-                                  bookmakedCourses[index].imageUrl.toString()),
-                              fit: BoxFit.cover,
-                            ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                      child: ListTile(
+                        leading: Expanded(
+                          child: Image(
+                            image: NetworkImage(
+                                bookmakedCourses[index].imageUrl.toString()),
+                            fit: BoxFit.cover,
                           ),
-                          title: Text(bookmakedCourses[index].title),
+                        ),
+                        title: Text(
+                          bookmakedCourses[index].title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(15, 15, 0, 5),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
                     child: Text(
                       "Bookmarks",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).highlightColor,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                   ),
@@ -160,8 +169,9 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                   const Padding(padding: EdgeInsets.all(5)),
                                   Text(
                                     "${courseBookmarks[idx].inHours}:${courseBookmarks[idx].inMinutes.remainder(60)}:${(courseBookmarks[idx].inSeconds.remainder(60))}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    style: TextStyle(
+                                      color: Theme.of(context).highlightColor,
+                                      fontWeight: FontWeight.bold
                                     ),
                                   )
                                 ],
