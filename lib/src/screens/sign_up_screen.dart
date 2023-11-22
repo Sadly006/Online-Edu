@@ -160,6 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Center(
                   child: TextFormField(
+                    obscureText: _obscureText,
                     controller: password,
                     decoration: InputDecoration(
                       filled: true,
@@ -189,7 +190,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Center(
                   child: TextFormField(
-                    obscureText: true,
+                    obscureText: _obscureText,
                     controller: confirmPassword,
                     decoration: InputDecoration(
                       filled: true,
