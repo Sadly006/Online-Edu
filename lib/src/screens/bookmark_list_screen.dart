@@ -3,6 +3,7 @@ import 'package:online_edu/src/models/course_model.dart';
 import 'package:online_edu/src/providers/bookmark_provider.dart';
 import 'package:online_edu/src/providers/course_provider.dart';
 import 'package:online_edu/src/screen_sizes/screen_size_page.dart';
+import 'package:online_edu/src/screens/video_player_screen.dart';
 import 'package:provider/provider.dart';
 
 class BookmarksScreen extends StatefulWidget {
@@ -37,6 +38,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
   @override
   Widget build(BuildContext context) {
     BookmarkProvider bookmarkProvider = Provider.of<BookmarkProvider>(context);
+    CourseProvider courseProvider = Provider.of<CourseProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -128,18 +130,30 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                               padding: const EdgeInsets.all(10),
                               child: Row(
                                 children: [
-                                  Container(
-                                    width: 50.0,
-                                    height: 25.0,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.play_arrow,
-                                        color: Colors.white,
-                                        size: 20.0,
+                                  GestureDetector(
+                                    onTap: () {
+                                      courseProvider.setCurrentCourse(bookmakedCourses[index]);
+                                      int seekTo = courseBookmarks[idx].inSeconds;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => VideoPlayerScreen(seekTo: seekTo),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 50.0,
+                                      height: 25.0,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).primaryColor,
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.play_arrow,
+                                          color: Colors.white,
+                                          size: 20.0,
+                                        ),
                                       ),
                                     ),
                                   ),

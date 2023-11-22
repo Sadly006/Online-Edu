@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
-  const VideoPlayerScreen({Key? key}) : super(key: key);
+  final int seekTo;
+
+  VideoPlayerScreen({Key? key, required this.seekTo}) : super(key: key);
 
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
@@ -27,6 +29,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     final courseProvider = Provider.of<CourseProvider>(context, listen: false);
     _controller = VideoPlayerController.networkUrl(Uri.parse(courseProvider.currentCourse!.videoUrl))
       ..initialize().then((_) {
+        _controller.seekTo(Duration(seconds: widget.seekTo));
         setState(() {
           _controller.play();
           _isPlaying = true;
