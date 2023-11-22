@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_edu/src/models/bookmark_marker_model.dart';
 import 'package:online_edu/src/providers/bookmark_provider.dart';
 import 'package:online_edu/src/providers/course_provider.dart';
-import 'package:online_edu/src/widgets/video_progress_colors_custom.dart';
+import 'package:online_edu/src/models/video_progress_colors_custom.dart';
 import 'package:online_edu/src/widgets/video_progress_indicator_custom.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -73,9 +73,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void _addBookmark() {
     final courseProvider = Provider.of<CourseProvider>(context, listen: false);
     setState(() {
-      // bookmarks.add(_controller.value.position);
       Provider.of<BookmarkProvider>(context, listen: false).addBookmark(courseProvider.currentCourse!.id, _controller.value.position);
     });
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Added Bookmark"),
+    ));
   }
 
   @override

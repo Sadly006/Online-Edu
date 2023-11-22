@@ -71,12 +71,10 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                       child: ListTile(
-                        leading: Expanded(
-                          child: Image(
-                            image: NetworkImage(
-                                bookmakedCourses[index].imageUrl.toString()),
-                            fit: BoxFit.cover,
-                          ),
+                        leading: Image(
+                          image: NetworkImage(
+                              bookmakedCourses[index].imageUrl.toString()),
+                          fit: BoxFit.cover,
                         ),
                         title: Text(
                           bookmakedCourses[index].title,
@@ -133,24 +131,27 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                           ),
                           onDismissed: (DismissDirection direction) {
                             bookmarkProvider.deleteBookmark(courseId, courseBookmarks[idx]);
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text("Bookmark Removed"),
+                            ));
                           },
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      courseProvider.setCurrentCourse(bookmakedCourses[index]);
-                                      int seekTo = courseBookmarks[idx].inSeconds;
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => VideoPlayerScreen(seekTo: seekTo),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
+                          child: GestureDetector(
+                            onTap: () {
+                              courseProvider.setCurrentCourse(bookmakedCourses[index]);
+                              int seekTo = courseBookmarks[idx].inSeconds;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => VideoPlayerScreen(seekTo: seekTo),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Container(
                                       width: 50.0,
                                       height: 25.0,
                                       decoration: BoxDecoration(
@@ -165,16 +166,16 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const Padding(padding: EdgeInsets.all(5)),
-                                  Text(
-                                    "${courseBookmarks[idx].inHours}:${courseBookmarks[idx].inMinutes.remainder(60)}:${(courseBookmarks[idx].inSeconds.remainder(60))}",
-                                    style: TextStyle(
-                                      color: Theme.of(context).highlightColor,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  )
-                                ],
+                                    const Padding(padding: EdgeInsets.all(5)),
+                                    Text(
+                                      "${courseBookmarks[idx].inHours}:${courseBookmarks[idx].inMinutes.remainder(60)}:${(courseBookmarks[idx].inSeconds.remainder(60))}",
+                                      style: TextStyle(
+                                        color: Theme.of(context).highlightColor,
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),

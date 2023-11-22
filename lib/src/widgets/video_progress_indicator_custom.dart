@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_edu/src/models/bookmark_marker_model.dart';
-import 'package:online_edu/src/widgets/video_progress_colors_custom.dart';
+import 'package:online_edu/src/models/video_progress_colors_custom.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoProgressIndicatorCustom extends StatefulWidget {
