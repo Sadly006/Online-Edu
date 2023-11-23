@@ -100,6 +100,38 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     });
   }
 
+  void _seekTo(int seconds) {
+    Duration seekDuration = Duration(seconds: seconds);
+
+    setState(() {
+      _isSeeking = true;
+    });
+
+    _controller.seekTo(seekDuration);
+
+    _controller.play().then((_) {
+      setState(() {
+        _isSeeking = false;
+      });
+    });
+  }
+
+  void _seekToModule(int seconds) {
+    Duration seekDuration = Duration(seconds: seconds);
+
+    setState(() {
+      _isSeeking = true;
+    });
+
+    _controller.seekTo(seekDuration);
+
+    _controller.play().then((_) {
+      setState(() {
+        _isSeeking = false;
+      });
+    });
+  }
+
   void _addBookmark() {
     final courseProvider = Provider.of<CourseProvider>(context, listen: false);
     setState(() {
@@ -110,10 +142,39 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     ));
   }
 
+  int _findNextValue(Map<String, int> modules, int value, bool next) {
+    int seekTo = value;
+
+    if(next){
+      for (var entry in modules.entries) {
+        if (entry.value > value) {
+          seekTo = entry.value;
+          break;
+        }
+      }
+    } else {
+      int flag = 0;
+      List<MapEntry<String, int>> reversedEntries = modules.entries.toList().reversed.toList();
+
+      for (var entry in reversedEntries) {
+        if(entry.value <= value){
+          flag++;
+        }
+        if(flag == 2){
+          seekTo = entry.value;
+          break;
+        }
+      }
+    }    
+
+    return seekTo;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bookmarkProvider = Provider.of<BookmarkProvider>(context);
     final courseProvider = Provider.of<CourseProvider>(context, listen: false);
+    Map<String, int> modules = courseProvider.currentCourse!.modules;
 
     return Scaffold(
       appBar: AppBar(
@@ -133,57 +194,136 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
           _seek(seekForward);
         },
-        child: Center(
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              if (!_controller.value.isInitialized || _isSeeking)
-                const CircularProgressIndicator()
-              else
-                AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
-                ),
-              if (_controller.value.isInitialized && _showControls && !_isSeeking)
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (_controller.value.isInitialized)
-                        VideoProgressIndicatorCustom(
-                          _controller,
-                          allowScrubbing: true,
-                          colors: VideoProgressColorsCustom(
-                            playedColor: Colors.amber,
-                            bufferedColor: Colors.grey,
-                            backgroundColor: Colors.black,
-                          ),
-                          markers: bookmarkProvider.getBookmarks(courseProvider.currentCourse!.id).map((bookmark) {
-                            return BookmarkMarker(
-                              bookmark,
-                              color: Colors.green,
-                            );
-                          }).toList(),
-                        ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                            onPressed: _togglePlayPause,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.bookmark),
-                            onPressed: _addBookmark,
-                          ),
-                        ],
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: displayHeight(context) * 0.3,
+              pinned: true,
+              collapsedHeight: displayHeight(context) * 0.3,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    if (!_controller.value.isInitialized || _isSeeking)
+                      const CircularProgressIndicator()
+                    else
+                      AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
                       ),
-                    ],
-                  ),
+                    if (_controller.value.isInitialized && _showControls && !_isSeeking)
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (_controller.value.isInitialized)
+                              VideoProgressIndicatorCustom(
+                                _controller,
+                                allowScrubbing: true,
+                                colors: VideoProgressColorsCustom(
+                                  playedColor: Colors.amber,
+                                  bufferedColor: Colors.grey,
+                                  backgroundColor: Colors.black,
+                                ),
+                                markers: bookmarkProvider.getBookmarks(courseProvider.currentCourse!.id).map((bookmark) {
+                                  return BookmarkMarker(
+                                    bookmark,
+                                    color: Colors.green,
+                                  );
+                                }).toList(),
+                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.fast_rewind),
+                                  onPressed: () {
+                                    int previousModulePosition = _findNextValue(modules, _controller.value.position.inSeconds, false);
+                                    _seekTo(previousModulePosition);
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                                  onPressed: _togglePlayPause,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.fast_forward),
+                                  onPressed: () {
+                                    int nextModulePosition = _findNextValue(modules, _controller.value.position.inSeconds, true);
+                                    _seekTo(nextModulePosition);
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.bookmark),
+                                  onPressed: _addBookmark,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
-            ],
-          ),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Course Modules',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int idx) {
+                  final key = modules.keys.elementAt(idx);
+                  final value = modules[key];
+
+                  return GestureDetector(
+                      onTap: () {
+                        _seekToModule(value!);
+                      },
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 50.0,
+                                height: 25.0,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Center(
+                                  child: Image(
+                                    image: NetworkImage(
+                                        courseProvider.currentCourse!.imageUrl.toString()),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const Padding(padding: EdgeInsets.all(5)),
+                              Text(
+                                key,
+                                style: TextStyle(
+                                  color: Theme.of(context).highlightColor,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                },
+                childCount: modules.length,
+              ),
+            ),
+          ],
         ),
       ),
     );
